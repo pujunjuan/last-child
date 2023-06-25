@@ -1,0 +1,77 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.simple.mapper.LeaveMapper">
+    <cache-ref namespace="com.simple.mapper.LeaveMapper"/>
+    <resultMap id="BaseLeaveResult" type="leave">
+        <id column="id" property="id"></id>
+        <result column="title" property="title"></result>
+        <result column="apply_id" property="applyId"></result>
+        <result column="deal_id" property="dealId"></result>
+        <result column="create_time" property="createTime"></result>
+        <result column="deal_time" property="dealTime"></result>
+        <result column="status" property="status"></result>
+        <result column="start_time" property="startTime"></result>
+        <result column="end_time" property="endTime"></result>
+        <result column="reason" property="reason"></result>
+        <result column="remark" property="remark"></result>
+        <result column="limits" property="limits"></result>
+        <association property="student" column="apply_id" select="com.simple.mapper.StudentMapper.selectStudentById"></association>
+        <association property="teacher" column="deal_id" select="com.simple.mapper.TeacherMapper.getTeacherById"></association>
+    </resultMap>
+
+    <select id="selectLeaveById" resultType="com.simple.domian.Leave">
+        select * from absence where apply_id=#{id} and status="同意"
+    </select>
+
+    <select id="selectLeaveOpr" resultMap="BaseLeaveResult">
+        select * from
+        absence a join student b on a.apply_id=b.id
+        left join teacher c on a.deal_id=c.id
+        ${ew.customSqlSegment}
+    </select>
+    <select id="selectLeaveOpr1" resultType="com.simple.domian.Leave"></select>
+
+
+    <update id="updateLeaveInfo">
+        update absence
+        <set>
+            <if test="title !=null">
+                title=#{title},
+            </if>
+            <if test="status !=null">
+                status=#{status},
+            </if>
+            <if test="startTime !=null">
+                start_time=#{startTime},
+            </if>
+            <if test="endTime !=null">
+                end_time=#{endTime},
+            </if>
+            <if test="reason !=null">
+                reason=#{reason},
+            </if>
+            <if test="remark !=null">
+                remark=#{remark},
+            </if>
+            <if test="applyId !=null and applyId !='' ">
+                apply_id=#{applyId},
+            </if>
+            <if test="dealId !=null  and dealId !=''">
+                deal_id=#{dealId},
+            </if>
+            <if test="createTime !=null">
+                create_time=#{createTime},
+            </if>
+            <if test="dealTime !=null">
+                deal_time=#{dealTime},
+            </if>
+            <if test="limits !=null">
+                limits=#{limits},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+</mapper>

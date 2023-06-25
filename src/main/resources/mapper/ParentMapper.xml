@@ -1,0 +1,57 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.simple.mapper.ParentMapper">
+    <cache-ref namespace="com.simple.mapper.ParentMapper"/>
+    <resultMap id="BaseMap" type="parent">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="birth" jdbcType="DATE" property="birth" />
+        <result column="sex" jdbcType="VARCHAR" property="sex" />
+        <result column="telephone" jdbcType="VARCHAR" property="birth" />
+        <result column="card" jdbcType="VARCHAR" property="card" />
+        <result column="address" jdbcType="VARCHAR" property="address" />
+        <result column="email" jdbcType="VARCHAR" property="email" />
+    </resultMap>
+
+    <sql id="BaseSql">
+        id,name ,birth,sex,telephone,card,address,email
+    </sql>
+    <update id="updateParent" parameterType="parent">
+        update parent
+        <set>
+            <if test="name !=null ">
+                name=#{name},
+            </if>
+            <if test="telephone !=null">
+                telephone=#{telephone},
+            </if>
+            <if test="birth !=null ">
+                birth=#{birth},
+            </if>
+
+            <if test="sex !=null ">
+                sex=#{sex},
+            </if>
+            <if test="card !=null ">
+                card=#{card},
+            </if>
+            <if test="address !=null ">
+                address=#{address},
+            </if>
+            <if test="email !=null ">
+                email=#{email},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+    <select id="getParentByOpr" resultType="parent">
+        select * from parent  ${ew.customSqlSegment}
+    </select>
+    <select id="getParentById" resultType="parent">
+        select * from parent  where id=#{id}
+    </select>
+
+
+</mapper>

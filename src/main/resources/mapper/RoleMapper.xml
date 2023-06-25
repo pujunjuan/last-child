@@ -1,0 +1,16 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.simple.mapper.RoleMapper">
+    <cache-ref namespace="com.simple.mapper.RoleMapper"/>
+
+    <select id="selectByPage" resultType="role">
+        select *
+        from sys_role  ${ew.customSqlSegment}
+    </select>
+
+    <select id="getRoleById" resultType="role">
+        select * from sys_role where id=#{id}
+    </select>
+</mapper>

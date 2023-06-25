@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simple.mapper.StudentMapper">
+  <cache-ref namespace="com.simple.mapper.StudentMapper"/>
+  <resultMap id="BaseResultMap" type="Student">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="u_id" jdbcType="BIGINT" property="usId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="household" jdbcType="VARCHAR" property="household" />
+    <result column="nation" jdbcType="VARCHAR" property="nation" />
+    <result column="time" jdbcType="DATE" property="time" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
+    <result column="birth" jdbcType="DATE" property="birth" />
+    <result column="card" jdbcType="VARCHAR" property="card" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="class_id" jdbcType="BIGINT" property="classId" />
+    <result column="deleted" jdbcType="BIGINT" property="deleted" />
+    <association property="gclass" column="class_id" javaType="gclass" select="com.simple.mapper.GclassMapper.getGclassById">
+    </association>
+  </resultMap>
+
+  <resultMap id="BaseLeaveResult" type="Student">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="u_id" jdbcType="BIGINT" property="usId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="household" jdbcType="VARCHAR" property="household" />
+    <result column="nation" jdbcType="VARCHAR" property="nation" />
+    <result column="time" jdbcType="DATE" property="time" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
+    <result column="birth" jdbcType="DATE" property="birth" />
+    <result column="card" jdbcType="VARCHAR" property="card" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="class_id" jdbcType="BIGINT" property="classId" />
+    <result column="deleted" jdbcType="BIGINT" property="deleted" />
+    <result column="applyId" jdbcType="BIGINT" property="applyId" />
+    <collection property="leaveList" column="id" javaType="java.util.List" select="com.simple.mapper.LeaveMapper.selectLeaveById">
+    </collection>
+    </resultMap>
+  <!--  <collection property="leaveList" column="id" javaType="leave" select="com.simple.mapper.LeaveMapper.selectLeaveById">-->
+<!--  </collection>-->
+<!--  &#45;&#45;         SELECT a.id as sid, u_id, `name`,b.*,COUNT(*) as num from student a left JOIN absence b on a.id=b.apply_id-->
+<!--  &#45;&#45;         ${ew.customSqlSegment}-->
+<!--  &#45;&#45;         GROUP BY a.id
+SELECT *  from student a left join (SELECT apply_id,COUNT(*) as num
+    from absence b where b.status="同意" GROUP BY b.apply_id) as c
+    on a.id=c.apply_id
+    SELECT * FROM (SELECT *  from student a left join (SELECT apply_id,COUNT(*) as num
+    from absence b where b.status="同意" GROUP BY b.apply_id) as c on a.id=c.apply_id) as student
+    left join (SELECT * from absence d  where d.status="同意") as leaveList on student.id=leaveList.apply_id
+SELECT *  from student a left join absence b on a.id=b.apply_id
+-->
+  <select id="selectLeaveOpr1" resultMap="BaseLeaveResult">
+     SELECT  a.*,leaveList.id as id1,title,deal_id,deal_time,start_time,end_time from student a left JOIN (SELECT *
+     from absence  where status="同意") as leaveList on a.id=leaveList.apply_id
+    ${ew.customSqlSegment}
+    GROUP BY a.id
+    </select>
+
+  <sql id="Base_Column_List">
+    id, u_id, `name`, `time`, sex, birth, card, nation,household,address,class_id,deleted
+  </sql>
+
+    <update id="updateStudent" parameterType="Student">
+      update student
+      <set>
+        <if test="name !=null ">
+          name=#{name},
+        </if>
+        <if test="usId !=null and usId!=''">
+          u_id=#{usId},
+        </if>
+        <if test="time !=null ">
+          time=#{time},
+        </if>
+        <if test="sex !=null ">
+          sex=#{sex},
+        </if>
+        <if test="card !=null ">
+          card=#{card},
+        </if>
+        <if test="nation !=null ">
+          nation=#{nation},
+        </if>
+        <if test="household !=null ">
+          household=#{household},
+        </if>
+        <if test="address !=null ">
+          address=#{address},
+        </if>
+      </set>
+      where id=#{id}
+    </update>
+
+  <select id="selectByIdStudent" resultType="Student">
+        select * from student where id=#{id}
+  </select>
+  <select id="selectStudentById" resultMap="BaseResultMap">
+          select * from student a join class b on a.class_id=b.id where a.id=#{id}
+  </select>
+
+    <select id="selectByPage" resultMap="BaseResultMap">
+        select * from student a join class b on a.class_id=b.id
+         ${ew.customSqlSegment}
+    </select>
+
+  <select id="getNewStydent" resultType="Student">
+     select * from student order by id desc limit 1
+  </select>
+
+</mapper>

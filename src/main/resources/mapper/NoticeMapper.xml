@@ -1,0 +1,37 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.simple.mapper.NoticeMapper">
+    <cache-ref namespace="com.simple.mapper.NoticeMapper"/>
+    <resultMap type="notice" id="Resultnotice">
+        <id     property="id"             column="id"               />
+        <result property="createTime"           column="create_time"             />
+        <result property="content"            column="content"              />
+        <result property="title"           column="title"             />
+    </resultMap>
+    <update id="updateNotice">
+        update notice
+        <set>
+            <if test="title!=null">
+                title=#{title},
+            </if>
+            <if test="content!=null">
+                content=#{content},
+            </if>
+            <if test="createTime!=null">
+                create_time=#{createTime},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <select id="getNoticeOpr" resultType="notice">
+        select * from notice
+        ${ew.customSqlSegment}
+    </select>
+
+    <select id="getNewOneNotice" resultType="com.simple.domian.Notice">
+          SELECT * from notice where create_time=(select max(create_time) from notice)
+    </select>
+</mapper>

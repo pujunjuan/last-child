@@ -1,0 +1,37 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.simple.mapper.CookBookMapper">
+    <cache-ref namespace="com.simple.mapper.CookBookMapper"/>
+
+    <select id="getCookBookOpr" resultType="cookbook">
+        select * from cook_book  ${ew.customSqlSegment}
+    </select>
+
+    <update id="updateCookBook">
+        update cook_book
+        <set>
+            <if test="title !=null">
+                title=#{title},
+            </if>
+            <if test="image !=null">
+                image=#{image},
+            </if>
+            <if test="type !=null">
+                type=#{type},
+            </if>
+            <if test="createTime !=null">
+                create_time=#{createTime},
+            </if>
+            <if test="list !=null">
+                list=#{list},
+            </if>
+            <if test="canalyze !=null">
+                canalyze=#{canalyze},
+            </if>
+        </set>
+         where id=#{id}
+    </update>
+
+</mapper>

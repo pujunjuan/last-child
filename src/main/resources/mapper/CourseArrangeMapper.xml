@@ -1,0 +1,25 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.simple.mapper.CourseArrangeMapper">
+    <cache-ref namespace="com.simple.mapper.CourseArrangeMapper"/>
+    <resultMap type="courseArrange" id="BaseMapper">
+        <id property="id" column="id"></id>
+        <result property="teacherId" jdbcType="BIGINT" column="teacher_id"></result>
+        <result property="courseId" jdbcType="BIGINT" column="course_id"></result>
+        <result property="classId" jdbcType="BIGINT" column="class_id"></result>
+        <result property="term"  column="term"></result>
+        <association property="gclass" column="class_id" select="com.simple.mapper.GclassMapper.getGclassById"></association>
+        <association property="teacher" column="teacher_id" select="com.simple.mapper.TeacherMapper.getTeacherById"></association>
+        <association property="course" column="course_id" select="com.simple.mapper.CourseMapper.selectByIdCourse"></association>
+    </resultMap>
+
+    <select id="getCourseArrange" resultMap="BaseMapper">
+        select * from
+        course_arrange a join teacher b on a.teacher_id=b.id
+        join class c on a.class_id=c.id
+        ${ew.customSqlSegment}
+    </select>
+
+</mapper>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simple.mapper.TeacherMapper">
+  <cache-ref namespace="com.simple.mapper.TeacherMapper"/>
+  <resultMap id="BaseResultMap" type="Teacher">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="u_id" jdbcType="BIGINT" property="usId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="edu" jdbcType="VARCHAR" property="edu" />
+    <result column="nation" jdbcType="VARCHAR" property="nation" />
+    <result column="graduate" jdbcType="VARCHAR" property="graduate" />
+    <result column="job_time" jdbcType="TIMESTAMP" property="jobTime" />
+    <result column="birth" jdbcType="DATE" property="birth" />
+    <result column="telephone" jdbcType="VARCHAR" property="telephone" />
+    <result column="card" jdbcType="VARCHAR" property="card" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+  </resultMap>
+
+  <resultMap id="BaseResult" type="Teacher">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="edu" jdbcType="VARCHAR" property="edu" />
+    <result column="graduate" jdbcType="VARCHAR" property="graduate" />
+    <result column="job_time" jdbcType="TIMESTAMP" property="jobTime" />
+    <result column="telephone" jdbcType="VARCHAR" property="telephone" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, u_id as usId, `name`,  edu, nation,graduate, job_time, birth, telephone, card, address, sex,
+    email
+  </sql>
+
+  <update id="updateTeacher" parameterType="Teacher">
+     update teacher
+     <set>
+       <if test="name !=null">
+         name=#{name},
+       </if>
+       <if test="edu !=null">
+         edu=#{edu},
+       </if>
+       <if test="nation !=null">
+         nation=#{nation},
+       </if>
+       <if test="graduate !=null">
+         graduate=#{graduate},
+       </if>
+       <if test="jobTime !=null">
+         job_time=#{jobTime},
+       </if>
+       <if test="birth !=null">
+         birth=#{birth},
+       </if>
+       <if test="telephone !=null">
+         telephone=#{telephone},
+       </if>
+       <if test="name !=null">
+         address=#{address},
+       </if>
+       <if test="sex !=null">
+         sex=#{sex},
+       </if>
+       <if test="email !=null">
+         email=#{email},
+       </if>
+     </set>
+     where id=#{id}
+  </update>
+
+<!---->
+  <select id="selectByPage" resultType="Teacher">
+    select <include refid="Base_Column_List"/>
+    from teacher  ${ew.customSqlSegment}
+  </select>
+
+  <select id="getNewTeacher" resultType="Teacher">
+    select * from teacher order by id desc limit 1
+  </select>
+
+  <select id="getTeacherById" resultMap="BaseResult">
+      select * from teacher where id =#{id}
+  </select>
+
+
+</mapper>

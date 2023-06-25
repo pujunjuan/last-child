@@ -1,0 +1,30 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.simple.mapper.StudentParentMapper">
+    <cache-ref namespace="com.simple.mapper.StudentParentMapper"/>
+    <resultMap id="BaseStudentParent" type="studentparent">
+        <result property="parentId" jdbcType="BIGINT" column="parent_id"></result>
+        <result property="studentId" jdbcType="BIGINT" column="student_id" ></result>
+        <result property="relation" jdbcType="VARCHAR" column="relation"></result>
+        <association property="student" column="student_id" select="com.simple.mapper.StudentMapper.selectStudentById"></association>
+        <association property="parent" column="parent_id" select="com.simple.mapper.ParentMapper.getParentById"></association>
+    </resultMap>
+
+
+    <select id="getStudentParent" resultMap="BaseStudentParent" >
+       select * from
+       student a join student_parent b on a.id=b.student_id
+       join parent c on c.id=b.parent_id
+       where a.id=#{id}
+    </select>
+
+    <select id="getspOpr" resultMap="BaseStudentParent">
+        select * from
+       student a left join student_parent b on a.id=b.student_id
+       left join parent c on c.id=b.parent_id
+        ${ew.customSqlSegment}
+    </select>
+
+</mapper>

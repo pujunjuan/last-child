@@ -1,0 +1,21 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.simple.mapper.AdviceMapper">
+    <cache-ref namespace="com.simple.mapper.AdviceMapper"/>
+    <resultMap id="baseMap" type="advice">
+        <id column="id" property="id"></id>
+        <result column="t_id" property="tid"></result>
+        <result column="create_time" property="createTime"></result>
+        <result column="context" property="context"></result>
+        <result column="reply" property="reply"></result>
+        <result column="status" property="status"></result>
+        <association property="student" column="t_id" select="com.simple.mapper.StudentMapper.selectStudentById"></association>
+    </resultMap>
+    <select id="getAdviceOpr" resultMap="baseMap">
+        select * from
+        advice a join student b on a.t_id=b.id
+        ${ew.customSqlSegment}
+    </select>
+</mapper>

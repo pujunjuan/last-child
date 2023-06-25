@@ -1,0 +1,23 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.simple.mapper.BehaviorMapper">
+    <cache-ref namespace="com.simple.mapper.BehaviorMapper"/>
+    <resultMap id="baseMap" type="behavior">
+        <id column="id" property="id"></id>
+        <result column="t_id" property="tid"></result>
+        <result column="time" property="time"></result>
+        <result column="context" property="context"></result>
+        <result column="image" property="image"></result>
+        <association property="student" column="t_id" select="com.simple.mapper.StudentMapper.selectStudentById"></association>
+    </resultMap>
+
+    <select id="getBehaviorOpr" resultMap="baseMap">
+        select * from
+        daily_perform a join student b on a.t_id=b.id
+        ${ew.customSqlSegment}
+    </select>
+
+
+</mapper>

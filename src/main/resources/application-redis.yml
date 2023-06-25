@@ -1,0 +1,16 @@
+#redis服务器地址，另外注意开启redis服务
+spring:
+  redis:
+    host: 127.0.0.1
+    #redis服务器连接端口
+    port: 6379
+    #redis服务器连接密码
+    password:
+    jedis:
+      pool:
+        #连接池最大连接数
+        max-active: 8
+        #连接池最大阻塞等待时间
+        max-wait: 1
+        #连接池最大空闲连接
+        max-idle: 8

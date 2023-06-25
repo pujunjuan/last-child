@@ -1,0 +1,61 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.simple.mapper.CourseMapper">
+    <!-- 使用缓存 -->
+    <cache-ref namespace="com.simple.mapper.CourseMapper"></cache-ref>
+
+<!--    <cache type="com.simple.common.RedisCache"/>-->
+
+    <resultMap id="BaseResultMap" type="course">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="type" jdbcType="VARCHAR" property="type" />
+    </resultMap>
+
+    <resultMap id="TeacherResult" type="java.util.HashMap">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="edu" jdbcType="VARCHAR" property="edu" />
+        <result column="politic" jdbcType="VARCHAR" property="politic" />
+        <result column="telephone" jdbcType="VARCHAR" property="telephone" />
+        <result column="address" jdbcType="VARCHAR" property="address" />
+        <result column="sex" jdbcType="VARCHAR" property="sex" />
+        <result column="email" jdbcType="VARCHAR" property="email" />
+    </resultMap>
+
+
+    <sql id="CourseTeaName">
+       select * from course
+    </sql>
+
+    <select id="getCourseTeaName" parameterType="Long" resultMap="TeacherResult">
+        <include refid="CourseTeaName"/>
+        WHERE a.id=#{id}
+    </select>
+
+    <select id="selectByIdCourse" resultType="course">
+        select * from course where id=#{id}
+    </select>
+
+    <update id="updateCourse" parameterType="course">
+        update course
+        <set>
+            <if test="name !=null ">
+                name=#{name},
+            </if>
+            <if test="type !=null ">
+                type=#{type},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <select id="getCourseInfo" resultType="course">
+       select id,name,type from course  ${ew.customSqlSegment}
+    </select>
+
+
+
+</mapper>

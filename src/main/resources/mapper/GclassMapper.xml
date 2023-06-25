@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.simple.mapper.GclassMapper">
+    <cache-ref namespace="com.simple.mapper.GclassMapper"/>
+    <resultMap id="BaseResultMap" type="gclass">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="t_id" jdbcType="BIGINT" property="tid" />
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="info" jdbcType="VARCHAR" property="info" />
+        <result column="deleted" jdbcType="BIGINT" property="deleted" />
+        <association property="teacher" column="t_id" javaType="Teacher" select="com.simple.mapper.TeacherMapper.getTeacherById">
+        </association>
+        <collection property="student" column="id" javaType="Student" select="com.simple.mapper.StudentMapper.selectByIdStudent"></collection>
+    </resultMap>
+    <update id="updateGclass">
+        update class
+        <set>
+            <if test="name !=null">
+                name =#{name},
+            </if>
+            <if test="tid !=null and tid !='' ">
+                t_id =#{tid},
+            </if>
+            <if test="info !=null">
+                info =#{info},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <select id="getGclassByOpr" resultMap="BaseResultMap">
+        select * from class a join teacher b on a.t_id=b.id
+        ${ew.customSqlSegment}
+    </select>
+
+    <select id="getGclassById" resultType="gclass">
+        select * from class where id =#{id}
+    </select>
+
+</mapper>

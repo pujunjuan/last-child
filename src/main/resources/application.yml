@@ -1,0 +1,87 @@
+server:
+  #设置端口
+  port: 8080
+spring:
+  profiles:
+    #外置jdbc,redis,mail配置文件
+    active: jdbc,redis,mail
+  jpa:
+    open-in-view: false
+  http:
+    multipart:
+      enabled: true
+      max-file-size: 30MB
+      max-request-size: 30MB
+
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+  #实体扫描，多个package用逗号或者分号分隔
+  typeAliasesPackage: com.simple.domian
+  global-config:
+    #主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
+    id-type: 0
+    #字段策略 0:"忽略判断",1:"非 NULL 判断"),2:"非空判断"
+    field-strategy: 2
+    #驼峰下划线转换
+    db-column-underline: true
+    #mp2.3+ 全局表前缀 mp_
+    #table-prefix: mp_
+    #刷新mapper 调试神器
+    refresh-mapper: true
+    #数据库大写下划线转换
+    #capital-mode: true
+    #逻辑删除配置（下面3个配置）
+    logic-delete-value: 1
+    logic-not-delete-value: 0
+  configuration:
+    # 这个配置会将执行的sql打印出来，在开发或测试的时候可以用
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    #配置返回数据库(column下划线命名&&返回java实体是驼峰命名)，自动匹配无需as（没开启这个，SQL需要写as： select user_id as userId）
+    map-underscore-to-camel-case: true
+    # 如果查询结果中包含空值的列，则 MyBatis 在映射的时候，不会映射这个字段
+    #call-setters-on-nulls: true
+    # 一级缓存配置 一级缓存是本地或者说局部缓存，它不能被关闭，只能配置缓存范围。SESSION 或者 STATEMENT。
+    #local-cache-scope: session
+    # 二级缓存总开关
+    cache-enabled: false
+
+    #配置JdbcTypeForNull, oracle数据库必须配置
+    jdbc-type-for-null: 'null'
+
+
+#Cookie浏览器相关配置
+COOKIE:
+  #设置cookie默认时长30分钟
+  VALIDITY:7800
+
+
+aliyun:
+  oss:
+    endpoint: oss-cn-hangzhou.aliyuncs.com  #请填写您的 endpoint。
+    accessKeyId: LTAI4GFyeVmJiifVpFQshDKh               #请填写您的AccessKeyId。
+    accessKeySecret: DujfRYOI4aY5HwkbhguB0xIG1MxwID   #请填写您的AccessKeySecret。
+    #bucket可以在控制台创建，也可以使用java代码创建
+    bucketName: garten            #请填写您的 bucketname 。
+    urlPrefix: https://garten.oss-cn-hangzhou.aliyuncs.com
+
+
+# 应用ID,您的APPID，收款账号既是您的APPID对应支付宝账号，在沙箱应用中获取
+appId: 2021000120616378
+# 商户私钥，您的PKCS8格式RSA2私钥，通过开发助手生成的应用私钥
+privateKey: MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDG3bYRtI2usyKq3VogrFEv5LZRDt5o2cgQHgGv6uULOTCPM0UXDZveVwsDW+RA0ZaQlOueKlGlu0N1AZeaWSCTO81URNO3YMV0gKMoDIMgOCTMbBK3+OmTZodOzd5z1BQjpUF2KLoXmbhBEQVTr8DjkbN3DZ532WAcHrG5lVsCEPnNTq7AtG8Pyisz/+wQg90TLH3zqQ2Qq5YYxWu71Y0rLDPO1FjTLJGZZB4BqY9NKHm54pJrVDMY2ZdvyKE+I5DGXoW64Hx5kmVklsqhVjhx8yrWvWIEPP3TvDIufkACFU0/StKFmWjBKXanJAlOnzmUJvxY5Uh/edPvaCcqMs1XAgMBAAECggEAQrSV4OR+be46n7O2CqWiaf0+xnvFUMhUWkumZzrUb2pUhoQ9FZmEAhWSZSMKsk9bQM4jJp+tWXkyDGpnTue8jIaPvkeD+MvmD8kicUmZJlKOzV8m/DzrJH1Mv7tAdfvacYZ6KcdJfKccbf7mmYanne3+k92mnS72FRiaptSZfVxaM1sxpaKSx8VCtOd1uN6XtAw2Qdb+02IIpjyCKZ3B1ZdwrmAdC5djs1U9BMn7D0+nTy+5Mv2v7/0a0qy6nnjljOPOZ0w88itzIVZjIYc9+408PiZ829RLeDn4b+Nzl2p1kKdfGMFNlNL4rGbKR7jLZX4PKxEDBpl+EbvqvsFluQKBgQD6CZeMs3MW2q5UqoY1sdMxv5wbsAUX5VYqQBxqOJR7y6Wd2Jjwo+5k5Zkz1kAmqMJn/t7h2FjpzsJyngeSAoNv7UopqftN0Q3Avt1qFk5xElXfTH/DNtmol9ljrWcjv36Peb2OA0eKGIxev1BzuBfso1uKtSh4tI4b2RJ9jy/qWwKBgQDLm7t0EnJO9/tUjLAH3Dwvh10SIcLb0uUFFaIqWf7e0QqhHsiaIotbT28BY95UeBFyY46vLhZlxB8leVwCX8RGdwh3X4dmOaZRa6GLldg2k9RnQGCXW3Kwj/vQK9MAsnQert4N7P+RbNThaZ7MsxUC90ae8EfJT4s0yHxL10NBtQKBgEzvCJ91U7MzhDJu6a650XbcMyddyKNqoFGNunCAikdxCLuBusVIW4DWGIaXpNOAV5jyFhg9nlYKlU/5CfFGLrUQuSIKuFVgPrAQykXrKSWnc56qhiFFzkEOwAfogfTA5is1VTrODYQTO5WnnhSND2dzeCY8yYAiZhtxdjwGA8NDAoGAGHjWVgQlkxJBNg9W1QsGfNvzNsuyBQPbHPpVrGt2s8dCVM1DZStDvqzUdcFQJqzrw+jtbGbIsGCbMcDdazeheqqx7M8hkgrZz611FDblbuHjxKk7MtX9+fTEWmf6C3pndIymCdxzd0IycAlm2cmoe9vGtDHDHxIddDGopuDvp4UCgYBiXEOI/j29IEyHbrqyZNk3o3C9MAE8Yx3X30sLfDF8YaOL8jL4M++FnhKxV6KC8HGMT27QB6CX4SR75gSydl+0gdYduBoK+PM+el+psawjKF4bW6gCCIVwQz5Iqm3EpAONydUc5RhNc0aCS/SfKNNeQ35EPYLX+ezhlsF/dZunrA==
+# 支付宝公钥,在沙箱应用获取，通过应用公钥生成支付宝公钥
+publicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAi4Refz9vvIHBkL36RI9b5Tfe0lxIVKIXsw0FZkQkVlNeCOn2hpjH7cknOG/M3PEXxI1yXGsc30YGXUSJGvIYlKV8XS8oGUzYDdMO0KTuB5+beO/MbvzhULOJsJL7KKwo+WIjablrPpexcqVlclDs/qbpbzdsjUwRxbThDGgPVWYmws5HMSvAXBcGZAIpFFlTjowQh7UHHpkr4DnWIXV2G8zMhpDvR801J5/qc7P0KOe7rBC+8LIBIh5nnPimwGZ7+cQjhL3oMcQOL1SbAnuF449q8ybYINJ/hyNsJFLR+iyKGr8AlPxXi+ztGqpassNKF+XAyZofKjaLaRppCVU6sQIDAQAB
+# 服务器异步通知页面路径需http://格式的完整路径，不能加?id=123这类自定义参数
+notifyUrl: http://localhost:8080/alipay/success
+# 页面跳转同步通知页面路径 需http://格式的完整路径，不能加?id=123这类自定义参数
+returnUrl: http://localhost:8080/alipay/success
+# 签名方式
+signType: RSA2
+# 字符编码格式
+charset: utf-8
+# 支付宝网关，在沙箱应用中获取
+gatewayUrl: https://openapi.alipaydev.com/gateway.do
+
+
+
+

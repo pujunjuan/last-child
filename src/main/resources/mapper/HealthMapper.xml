@@ -1,0 +1,61 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.simple.mapper.HealthMapper">
+    <cache-ref namespace="com.simple.mapper.HealthMapper"/>
+    <resultMap id="BaseResultMap" type="health">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="s_id" jdbcType="BIGINT" property="sid" />
+        <result column="classId" jdbcType="BIGINT" property="classId" />
+        <result column="height" jdbcType="FLOAT" property="height"/>
+        <result column="weight" jdbcType="FLOAT" property="weight" />
+        <result column="blood" jdbcType="VARCHAR" property="blood" />
+        <result column="time" jdbcType="TIMESTAMP" property="time" />
+        <result column="status" jdbcType="VARCHAR" property="status" />
+        <result column="line" jdbcType="VARCHAR" property="line" />
+        <result column="context" jdbcType="VARCHAR" property="context" />
+        <association property="student" column="s_id" javaType="Student" select="com.simple.mapper.StudentMapper.selectByIdStudent">
+        </association>
+    </resultMap>
+
+    <update id="updateHealth">
+        update health
+        <set>
+            <if test="sid != null and sid != ''">
+                s_id=#{sid},
+            </if>
+            <if test="height !=null">
+                height=#{height},
+            </if>
+            <if test="weight !=null">
+                weight=#{weight},
+            </if>
+            <if test="blood !=null">
+                blood=#{blood},
+            </if>
+            <if test="time !=null">
+                time=#{time},
+            </if>
+            <if test="status !=null">
+                status=#{status},
+            </if>
+            <if test="line !=null">
+                line=#{line},
+            </if>
+            <if test="context !=null">
+                context=#{context},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+
+    <!--    select="com.simple.mapper.StudentMapper.selectByIdStudent"-->
+
+    <select id="selectHealthOpr" resultMap="BaseResultMap">
+        select * from health a join student b on a.s_id=b.id
+        ${ew.customSqlSegment}
+    </select>
+
+</mapper>
